@@ -344,7 +344,7 @@ class Ping(object):
                 self.stats.destination_ip = info[4][0]
             else:
                 self.stats.destination_ip = socket.gethostbyname(self.stats.destination_host)
-        except socket.error, e:
+        except socket.error as e:
             self._stderr.write("\nPYTHON PING: Unknown host: %s (%s)\n" % (self.stats.destination_host, e.args[1]))
             #sys.exit(2)
             self.unknown_host = True
@@ -366,7 +366,7 @@ class Ping(object):
                 current_socket = socket.socket(socket.AF_INET6, socket.SOCK_RAW, socket.getprotobyname("ipv6-icmp"))
             else:
                 current_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.getprotobyname("icmp"))
-        except socket.error, e:
+        except socket.error as e:
 #            if e.args[0] == 1:
 #                # Operation not permitted - Add more information to traceback
 #                etype, evalue, etb = sys.exc_info()
@@ -486,7 +486,7 @@ class Ping(object):
                 current_socket.sendto(packet, (self.stats.destination_ip, self.stats.destination_port, 0, 0))
             else:
                 current_socket.sendto(packet, (self.stats.destination_ip, self.stats.destination_port))
-        except socket.error, e:
+        except socket.error as e:
             self._stderr.write("General failure (%s)\n" % (e.args[1]))
             send_time = None
     

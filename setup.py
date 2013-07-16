@@ -37,7 +37,7 @@ def get_version_from_git():
             shell=False, cwd=PACKAGE_ROOT,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
-    except Exception, err:
+    except Exception as err:
         return _error("Can't get git hash: %s" % err)
 
     process.wait()
@@ -54,30 +54,15 @@ def get_version_from_git():
     try:
         raw_timestamp, hash = output.split("-", 1)
         timestamp = int(raw_timestamp)
-    except Exception, err:
+    except Exception as err:
         return _error("Error in git log output! Output was: %r" % output)
 
     try:
         timestamp_formatted = time.strftime("%Y.%m.%d", time.gmtime(timestamp))
-    except Exception, err:
+    except Exception as err:
         return _error("can't convert %r to time string: %s" % (timestamp, err))
 
     return "%s.%s" % (timestamp_formatted, hash)
-
-
-# convert creole to ReSt on-the-fly, see also:
-# https://code.google.com/p/python-creole/wiki/UseInSetup
-try:
-    from creole.setup_utils import get_long_description
-except ImportError:
-    if "register" in sys.argv or "sdist" in sys.argv or "--long-description" in sys.argv:
-        etype, evalue, etb = sys.exc_info()
-        evalue = etype("%s - Please install python-creole >= v0.8 -  e.g.: pip install python-creole" % evalue)
-        raise etype, evalue, etb
-    long_description = None
-else:
-    long_description = get_long_description(PACKAGE_ROOT)
-
 
 def get_authors():
     authors = []
@@ -91,7 +76,7 @@ def get_authors():
             authors.append(line.strip(" *\r\n"))
         f.close()
         authors.sort()
-    except Exception, err:
+    except Exception as err:
         authors = "[Error: %s]" % err
     return authors
 
@@ -100,7 +85,6 @@ setup(
     name='python-ping',
     version=get_version_from_git(),
     description='A pure python ICMP ping implementation using raw sockets.',
-    long_description=long_description,
     author=get_authors(),
     maintainer="Jens Diemer",
     maintainer_email="python-ping@jensdiemer.de",
